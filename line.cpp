@@ -1,39 +1,45 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string> 
 
-using namespace std;
 
-int const marks = 4;
-int const i_size = marks * 2 - 1;
+const int marks = 4;
+const int i_size = marks * 2 - 1;
 
-void ask(const string& file_name) {
-	ofstream file(file_name, ios::app);
-
-    int digit;
-	cout << "mark ... from 1 to 4: ";
-	cin >> digit;
-    file << digit << ' ';
-
-    file.close();
-}
-
-void make_file(vector<int>& numbers, const string& file_name)
-{
-	ifstream file(file_name);
-    int digit;
-
-    numbers.reserve(52);
-   	while (file >> digit)
-    {
-        numbers.push_back(digit - 1);
+void ask(const std::string& file_name) {
+    std::ofstream file(file_name, std::ios::app);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open file." << std::endl;
+        return;
     }
 
+    int digit;
+    std::cout << "Enter a mark from 1 to 4: ";
+    std::cin >> digit;
+    if (digit < 1 || digit > 4) {
+        std::cerr << "Invalid input. Please enter a number between 1 and 4." << std::endl;
+        return;
+    }
+    file << digit << ' ';
     file.close();
 }
 
-void draw_plot(vector<vector<char> >& line, const int j_size, const vector<int>& numbers)
-{
+void make_file(std::vector<int>& numbers, const std::string& file_name) {
+    std::ifstream file(file_name);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open file." << std::endl;
+        return;
+    }
+
+    int digit;
+    while (file >> digit) {
+        numbers.push_back(digit - 1);
+    }
+    file.close();
+}
+
+void draw_plot(std::vector<std::vector<char> >& line, const int j_size, const std::vector<int>& numbers) {
     int index = 0;
 
 	for(int i = 0; i < i_size; i++)
@@ -84,55 +90,47 @@ void draw_plot(vector<vector<char> >& line, const int j_size, const vector<int>&
 	}
 }
 
-void view_plot(const vector<vector<char> >& line, const int j_size)
-{
-	cout << " ^" << endl;
+void view_plot(const std::vector<std::vector<char> >& line, const int j_size) {
+	std::cout << " ^" << std::endl;
 	int u = marks + 1;
 	for(int i = 0; i < i_size; i++)
 	{
-		i % 2 == 0 ? cout << --u : cout << ' ';
-		cout << '|';
+		i % 2 == 0 ? std::cout << --u : std::cout << ' ';
+		std::cout << '|';
 		for(int j = 0; j < j_size; j++)
-			cout << line[i][j];
-		cout << endl;
+			std::cout << line[i][j];
+		std::cout << std::endl;
 	}
 
-	cout << ' '<< '\\';
+	std::cout << ' '<< '\\';
 	for(int j = 1; j < j_size + 2; j++)
-		cout << '-';
-	cout << '>'<< endl;
+		std::cout << '-';
+	std::cout << '>'<< std::endl;
 	for(int j = 1; j < j_size + 3; j++)
 	{
 		if((j + 2) % 5 != 0)
-			cout << ' ';
+			std::cout << ' ';
 		else
 		{
 			u > 9 ? j++ : j;
-			cout << u++;
+			std::cout << u++;
 		}
 	}
-	cout << endl;
+	std::cout << std::endl;
 }
 
-int main(){
-	vector<int> numbers;
-	string file_name = "/Users/timapashuk/Documents/lifeline/marks.txt";
-	ask(file_name);
-	make_file(numbers, file_name);
+int main() {
+    std::vector<int> numbers;
+    std::string file_name = "marks.txt";
 
-	int j_size = numbers.size() * 5 - 4;
-	vector<vector<char> > line(i_size, vector<char>(j_size));
+    ask(file_name);
+    make_file(numbers, file_name);
 
+    int j_size = numbers.size() * 5 - 4;
+    std::vector<std::vector<char> > line(i_size, std::vector<char>(j_size));
 
+    draw_plot(line, j_size, numbers);
+    view_plot(line, j_size);
 
-	draw_plot(line, j_size, numbers);
-	view_plot(line, j_size);
-
-	return 0;
+    return 0;
 }
-
-
-
-
-
-
