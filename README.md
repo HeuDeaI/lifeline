@@ -4,5 +4,5 @@ This program help you visualise your life satisfaction in terminal. One thing th
 For running this program, you should type follow commands:
 ```
 c++ -o line line.cpp
-open line
 ```
+After this point, you can type "open line" and mark your life...
